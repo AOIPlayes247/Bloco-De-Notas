@@ -170,8 +170,8 @@
   .sheet .f { margin-bottom: 20px; }
   .note { margin-top: 12px; font-size: .82rem; color: var(--muted); text-align: center; }
 
-  .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; background: var(--field); border: 1px solid var(--line); border-radius: 12px; padding: 4px; margin-bottom: 18px; }
-  .seg button { min-height: 44px; border: 0; border-radius: 9px; background: transparent; font-weight: 600; color: var(--muted); transition: background .2s ease, color .2s ease; }
+  .seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; background: var(--field); border: 1px solid var(--line); border-radius: 12px; padding: 4px; margin-bottom: 18px; }
+  .seg button { min-height: 44px; border: 0; border-radius: 9px; background: transparent; font-weight: 600; font-size: .85rem; padding: 0 4px; color: var(--muted); transition: background .2s ease, color .2s ease; }
   .seg button[aria-selected="true"] { background: var(--card); color: var(--text); box-shadow: 0 0 0 1px var(--line); }
   .sec-title { font-size: .85rem; color: var(--muted); margin-bottom: 12px; }
   .themes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
@@ -183,6 +183,15 @@
   .theme .sw { width: 100%; height: 36px; border-radius: 9px; border: 1px solid rgba(128,128,128,.45); }
   .theme[aria-pressed="true"] { border-color: var(--accent); }
   .theme[aria-pressed="true"] span:last-child::after { content: " ✓"; color: var(--accent); }
+
+  .credits { text-align: center; padding: 6px 0 2px; }
+  .badge { width: 72px; height: 72px; margin: 0 auto 14px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-size: 1.9rem; font-weight: 700; }
+  .by { color: var(--muted); font-size: .85rem; }
+  .author { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; margin: 2px 0 6px; }
+  .what { color: var(--muted); font-size: .9rem; margin-bottom: 22px; }
+  .yt { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; border-radius: 12px; background: var(--accent); color: var(--accent-ink); font-weight: 700; text-decoration: none; transition: transform .15s ease, filter .15s ease; }
+  .yt:active { transform: scale(.98); filter: brightness(.95); }
+  .yt:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
   #cOverlay { z-index: 70; }
   .confirm {
@@ -263,7 +272,8 @@
   </div>
   <div class="seg" role="tablist" aria-label="Seções do menu">
     <button type="button" role="tab" id="tabGeral" aria-selected="true" aria-controls="panelGeral">Geral</button>
-    <button type="button" role="tab" id="tabConfig" aria-selected="false" aria-controls="panelConfig">⚙️ Configurações</button>
+    <button type="button" role="tab" id="tabConfig" aria-selected="false" aria-controls="panelConfig">Configurações</button>
+    <button type="button" role="tab" id="tabCreditos" aria-selected="false" aria-controls="panelCreditos">Créditos</button>
   </div>
   <div id="panelGeral" role="tabpanel" aria-labelledby="tabGeral">
     <label class="f">Nome no bloco de notas
@@ -275,6 +285,15 @@
   <div id="panelConfig" role="tabpanel" aria-labelledby="tabConfig" hidden>
     <p class="sec-title">Tema do bloco de notas</p>
     <div class="themes" id="themes"></div>
+  </div>
+  <div id="panelCreditos" role="tabpanel" aria-labelledby="tabCreditos" hidden>
+    <div class="credits">
+      <div class="badge" aria-hidden="true">A</div>
+      <p class="by">Criado por</p>
+      <p class="author">AOIofc1</p>
+      <p class="what">Bloco de notas · Fluxo da Semana</p>
+      <a class="yt" href="https://www.youtube.com/channel/UCk6bAmx_xn8TlUm1DyJgKgA" target="_blank" rel="noopener noreferrer">▶ Visitar canal no YouTube</a>
+    </div>
   </div>
 </section>
 
@@ -475,15 +494,17 @@
   });
 
   /* Abas do menu */
+  var TABS = { geral: ["tabGeral", "panelGeral"], config: ["tabConfig", "panelConfig"], creditos: ["tabCreditos", "panelCreditos"] };
   function showTab(name) {
-    var cfg = name === "config";
-    $("panelGeral").hidden = cfg;
-    $("panelConfig").hidden = !cfg;
-    $("tabGeral").setAttribute("aria-selected", String(!cfg));
-    $("tabConfig").setAttribute("aria-selected", String(cfg));
+    Object.keys(TABS).forEach(function (k) {
+      var on = k === name;
+      $(TABS[k][0]).setAttribute("aria-selected", String(on));
+      $(TABS[k][1]).hidden = !on;
+    });
   }
-  $("tabGeral").addEventListener("click", function () { showTab("geral"); });
-  $("tabConfig").addEventListener("click", function () { showTab("config"); });
+  Object.keys(TABS).forEach(function (k) {
+    $(TABS[k][0]).addEventListener("click", function () { showTab(k); });
+  });
 
   /* Temas */
   var THEME_KEY = "fluxo-semana-tema-v1";
