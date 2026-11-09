@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#121212">
-<meta name="color-scheme" content="dark">
+<meta name="theme-color" id="themeColor" content="#121212">
+<script>try{var t=localStorage.getItem("fluxo-semana-tema-v1");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Fluxo da Semana">
@@ -17,11 +17,33 @@
     --bg: #121212; --card: #1E1E1E; --field: #262626; --line: #333333;
     --text: #E3E3E3; --muted: #9A9A9A;
     --accent: #8AB4F8; --accent-ink: #0F1A2E; --done: #81C995;
+    --placeholder: #6b6b6b; --box-border: #5a5a5a; --check-ink: #121212; --picker: invert(.8);
     --sat: env(safe-area-inset-top, 0px); --sab: env(safe-area-inset-bottom, 0px);
     color-scheme: dark;
   }
+  html[data-theme="branco"] {
+    --bg: #F3F4F6; --card: #FFFFFF; --field: #F1F3F4; --line: #DADCE0;
+    --text: #1F1F1F; --muted: #5F6368; --accent: #1A73E8; --accent-ink: #FFFFFF; --done: #1E8E3E;
+    --placeholder: #9AA0A6; --box-border: #9AA0A6; --check-ink: #FFFFFF; --picker: none; color-scheme: light;
+  }
+  html[data-theme="amarelo"] {
+    --bg: #FFF4B8; --card: #FFFBE6; --field: #FFF1BF; --line: #E3D283;
+    --text: #3B3200; --muted: #7A6A1E; --accent: #8A6500; --accent-ink: #FFFBE6; --done: #2E7D32;
+    --placeholder: #A89A5C; --box-border: #A89A5C; --check-ink: #FFFFFF; --picker: none; color-scheme: light;
+  }
+  html[data-theme="vermelho"] {
+    --bg: #1F0B0D; --card: #2D1215; --field: #3A171B; --line: #53262B;
+    --text: #F6E3E3; --muted: #C99FA1; --accent: #FF6B6B; --accent-ink: #2B0709; --done: #8FD19E;
+    --placeholder: #8F6165; --box-border: #8F6165; --check-ink: #1F0B0D; --picker: invert(.8); color-scheme: dark;
+  }
+  html[data-theme="bege"] {
+    --bg: #F2E8D8; --card: #FBF5EA; --field: #EFE3CF; --line: #D9C9AE;
+    --text: #3A2F23; --muted: #7B6B58; --accent: #8B5E34; --accent-ink: #FFF9EF; --done: #4E7D3A;
+    --placeholder: #A8977F; --box-border: #A8977F; --check-ink: #FFFFFF; --picker: none; color-scheme: light;
+  }
+  [hidden] { display: none !important; }
   * { box-sizing: border-box; margin: 0; -webkit-tap-highlight-color: transparent; }
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--bg); }
   body {
     background: var(--bg); color: var(--text);
     font-family: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -87,8 +109,8 @@
 
   .check { display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; min-height: 48px; padding: 0 4px 0 12px; margin-right: -4px; font-size: .9rem; color: var(--muted); touch-action: manipulation; }
   .check input { position: absolute; opacity: 0; width: 0; height: 0; }
-  .box { width: 32px; height: 32px; border-radius: 9px; border: 2px solid #5a5a5a; display: grid; place-items: center; transition: background .2s ease, border-color .2s ease; }
-  .box svg { width: 18px; height: 18px; stroke: var(--bg); stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transition: opacity .15s ease; }
+  .box { width: 32px; height: 32px; border-radius: 9px; border: 2px solid var(--box-border); display: grid; place-items: center; transition: background .2s ease, border-color .2s ease; }
+  .box svg { width: 18px; height: 18px; stroke: var(--check-ink); stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transition: opacity .15s ease; }
   .check input:checked + .box { background: var(--done); border-color: var(--done); }
   .check input:checked + .box svg { opacity: 1; }
   .check input:focus-visible + .box { outline: 2px solid var(--accent); outline-offset: 3px; }
@@ -102,9 +124,9 @@
     transition: border-color .15s ease, box-shadow .15s ease;
   }
   input[type="date"], input[type="time"], input[type="text"] { min-height: 48px; }
-  input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(.8); }
+  input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator { filter: var(--picker); }
   textarea { min-height: 140px; resize: none; line-height: 1.55; overflow: hidden; }
-  ::placeholder { color: #6b6b6b; }
+  ::placeholder { color: var(--placeholder); }
   input:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
 
   /* Menu inferior: dias da semana ao alcance do polegar */
@@ -147,6 +169,20 @@
   .close { width: 48px; height: 48px; margin-right: -10px; background: none; border: 0; border-radius: 12px; font-size: 1.4rem; color: var(--muted); }
   .sheet .f { margin-bottom: 20px; }
   .note { margin-top: 12px; font-size: .82rem; color: var(--muted); text-align: center; }
+
+  .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; background: var(--field); border: 1px solid var(--line); border-radius: 12px; padding: 4px; margin-bottom: 18px; }
+  .seg button { min-height: 44px; border: 0; border-radius: 9px; background: transparent; font-weight: 600; color: var(--muted); transition: background .2s ease, color .2s ease; }
+  .seg button[aria-selected="true"] { background: var(--card); color: var(--text); box-shadow: 0 0 0 1px var(--line); }
+  .sec-title { font-size: .85rem; color: var(--muted); margin-bottom: 12px; }
+  .themes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .theme {
+    display: flex; flex-direction: column; align-items: center; gap: 8px; min-height: 84px; padding: 10px 8px;
+    background: var(--field); border: 2px solid var(--line); border-radius: 14px; font-weight: 600; font-size: .88rem;
+    transition: border-color .2s ease;
+  }
+  .theme .sw { width: 100%; height: 36px; border-radius: 9px; border: 1px solid rgba(128,128,128,.45); }
+  .theme[aria-pressed="true"] { border-color: var(--accent); }
+  .theme[aria-pressed="true"] span:last-child::after { content: " ✓"; color: var(--accent); }
 
   #cOverlay { z-index: 70; }
   .confirm {
@@ -225,17 +261,27 @@
     <h2 id="sheetTitle">Menu</h2>
     <button class="close" id="close" type="button" aria-label="Fechar menu">✕</button>
   </div>
-  <label class="f">Nome no bloco de notas
-    <input type="text" id="owner" maxlength="40" placeholder="Digite seu nome" autocomplete="name" enterkeyhint="done">
-  </label>
-  <button class="reset" id="resetSheet" type="button">🔄 Resetar e Planejar Próximo Ciclo</button>
-  <p class="note">Limpa checkboxes, anotações, datas e horas. Seu nome é mantido. Tudo é salvo automaticamente neste aparelho.</p>
+  <div class="seg" role="tablist" aria-label="Seções do menu">
+    <button type="button" role="tab" id="tabGeral" aria-selected="true" aria-controls="panelGeral">Geral</button>
+    <button type="button" role="tab" id="tabConfig" aria-selected="false" aria-controls="panelConfig">⚙️ Configurações</button>
+  </div>
+  <div id="panelGeral" role="tabpanel" aria-labelledby="tabGeral">
+    <label class="f">Nome no bloco de notas
+      <input type="text" id="owner" maxlength="40" placeholder="Digite seu nome" autocomplete="name" enterkeyhint="done">
+    </label>
+    <button class="reset" id="resetSheet" type="button">🔄 Resetar e Planejar Próximo Ciclo</button>
+    <p class="note">Limpa checkboxes, anotações, datas e horas. Seu nome e o tema são mantidos. Tudo é salvo automaticamente neste aparelho.</p>
+  </div>
+  <div id="panelConfig" role="tabpanel" aria-labelledby="tabConfig" hidden>
+    <p class="sec-title">Tema do bloco de notas</p>
+    <div class="themes" id="themes"></div>
+  </div>
 </section>
 
 <div class="overlay" id="cOverlay"></div>
 <section class="confirm" id="confirm" role="alertdialog" aria-modal="true" aria-labelledby="cTitle" aria-describedby="cText" aria-hidden="true">
   <h2 id="cTitle">Deseja mesmo resetar?</h2>
-  <p id="cText">Isso limpa todo o planejamento: anotações, datas, horas e dias concluídos. Seu nome será mantido.</p>
+  <p id="cText">Isso limpa todo o planejamento: anotações, datas, horas e dias concluídos. Seu nome e o tema serão mantidos.</p>
   <div class="c-actions">
     <button class="btn-sec" id="cNo" type="button">Cancelar</button>
     <button class="btn-danger" id="cYes" type="button">Sim, resetar</button>
@@ -387,6 +433,7 @@
   /* Menu */
   function openMenu() {
     sheet.classList.add("open");
+    showTab("geral");
     overlay.classList.add("open");
     sheet.setAttribute("aria-hidden", "false");
     menuBtn.setAttribute("aria-expanded", "true");
@@ -426,6 +473,52 @@
     try { localStorage.setItem(OWNER_KEY, ownerEl.value); flash("Salvo"); }
     catch (e) { flash("Não foi possível salvar"); }
   });
+
+  /* Abas do menu */
+  function showTab(name) {
+    var cfg = name === "config";
+    $("panelGeral").hidden = cfg;
+    $("panelConfig").hidden = !cfg;
+    $("tabGeral").setAttribute("aria-selected", String(!cfg));
+    $("tabConfig").setAttribute("aria-selected", String(cfg));
+  }
+  $("tabGeral").addEventListener("click", function () { showTab("geral"); });
+  $("tabConfig").addEventListener("click", function () { showTab("config"); });
+
+  /* Temas */
+  var THEME_KEY = "fluxo-semana-tema-v1";
+  var THEMES = [
+    { id: "branco",   name: "Branco",   bg: "#F3F4F6", card: "#FFFFFF", accent: "#1A73E8" },
+    { id: "amarelo",  name: "Amarelo",  bg: "#FFF4B8", card: "#FFFBE6", accent: "#8A6500" },
+    { id: "escuro",   name: "Escuro",   bg: "#121212", card: "#1E1E1E", accent: "#8AB4F8" },
+    { id: "vermelho", name: "Vermelho", bg: "#1F0B0D", card: "#2D1215", accent: "#FF6B6B" },
+    { id: "bege",     name: "Bege",     bg: "#F2E8D8", card: "#FBF5EA", accent: "#8B5E34" }
+  ];
+  var themesEl = $("themes");
+  THEMES.forEach(function (t) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "theme";
+    b.dataset.id = t.id;
+    b.setAttribute("aria-pressed", "false");
+    b.innerHTML = '<span class="sw" style="background:linear-gradient(135deg,' + t.bg + ' 0 45%,' + t.card + ' 45% 72%,' + t.accent + ' 72%)"></span><span>' + t.name + '</span>';
+    b.addEventListener("click", function () { applyTheme(t.id, false); });
+    themesEl.appendChild(b);
+  });
+  function applyTheme(id, silent) {
+    var t = THEMES.filter(function (x) { return x.id === id; })[0] || THEMES[2];
+    document.documentElement.setAttribute("data-theme", t.id);
+    $("themeColor").setAttribute("content", t.bg);
+    themesEl.querySelectorAll(".theme").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.dataset.id === t.id));
+    });
+    if (silent) return;
+    try { localStorage.setItem(THEME_KEY, t.id); flash("Tema " + t.name); }
+    catch (e) { flash("Não foi possível salvar o tema"); }
+  }
+  var savedTheme = "escuro";
+  try { savedTheme = localStorage.getItem(THEME_KEY) || "escuro"; } catch (e) {}
+  applyTheme(savedTheme, true);
 
   /* Reset geral (confirmação própria: o confirm() nativo é bloqueado em alguns navegadores) */
   var cBox = $("confirm"), cOverlay = $("cOverlay");
