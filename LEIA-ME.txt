@@ -1,0 +1,48 @@
+NOTELY - Bloco de notas semanal (app instalável / PWA)
+========================================================
+
+ARQUIVOS (todos vão juntos na RAIZ do repositório do GitHub, sem subpastas)
+  index.html              página de download do app
+  BlocoDeNotas.html       o Notely em si
+  manifest.webmanifest    dados do app (nome, ícones, cores)
+  sw.js                   deixa o app offline e rápido
+  icon-192.png, icon-512.png, icon-maskable-512.png, apple-touch-icon.png   logo
+  atualizar-csp.py        ferramenta de segurança (só se você editar o código)
+  LEIA-ME.txt             este arquivo (pode ficar ou não no repositório)
+
+COMO PUBLICAR
+  1. Extraia este arquivo (clique direito > Extrair aqui, no WinRAR).
+  2. No GitHub: Add file > Upload files > envie os arquivos EXTRAÍDOS (não o .zip).
+  3. Settings > Pages > Deploy from a branch > main > / (root).
+  4. Settings > Pages > marque "Enforce HTTPS".
+  5. Abra https://SEU-USUARIO.github.io/NOME-DO-REPOSITORIO/ no celular e instale.
+
+SEGURANCA - O QUE FOI FEITO
+  - CSP (Content Security Policy) com "impressão digital" (SHA-256) de cada script e
+    estilo: o navegador só executa o código original. Se alguém injetar um script,
+    ele é bloqueado. A CSP também proíbe enviar dados para outros sites
+    (connect-src, img-src, form-action) e bloqueia iframes, plugins e <base>.
+  - Nenhum recurso externo: sem fontes do Google, sem bibliotecas de terceiros, sem
+    CDN. Não existe "cadeia de fornecedores" para ser invadida.
+  - Anti-clickjacking: se o site for aberto dentro de um iframe de outro site, a tela
+    é ocultada.
+  - Dados do LocalStorage são tratados como não confiáveis: só entram campos esperados,
+    com tipo e tamanho válidos (protege contra dados adulterados e contra
+    prototype pollution). Anotações limitadas a 20.000 caracteres, nome a 40.
+  - Nada do que a pessoa digita é inserido como HTML (sempre texto puro).
+  - Referrer-Policy "no-referrer"; links externos com rel="noopener noreferrer".
+  - Service worker restrito: só atende GET do próprio site e só guarda a lista de
+    arquivos conhecida.
+
+LIMITES (o que o GitHub Pages não permite)
+  - Não dá para definir cabeçalhos HTTP (X-Frame-Options, HSTS, Permissions-Policy).
+    A CSP via <meta> e o anti-iframe acima cobrem o principal.
+  - O LocalStorage NÃO é criptografado: quem pega o celular desbloqueado consegue ver
+    as anotações. Para isso o certo é ter bloqueio de tela no aparelho.
+  - A maior ameaça real a um site estático é alguém invadir a CONTA do GitHub e
+    alterar o código. Ative a verificação em duas etapas (2FA) e use senha forte.
+
+SE VOCÊ EDITAR O CÓDIGO
+  1. Rode:  python3 atualizar-csp.py   (recalcula a CSP; sem isso o app deixa de funcionar)
+  2. Em sw.js aumente VERSION (ex.: notely-v2 -> notely-v3) para o celular atualizar.
+  Ou peça a mudança ao Claude, que já refaz as duas coisas.

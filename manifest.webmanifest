@@ -1,0 +1,37 @@
+{
+  "id": "./BlocoDeNotas.html",
+  "name": "Notely",
+  "short_name": "Notely",
+  "description": "Seu bloco de notas para planejar a semana e o mês. Leve, offline e sem cadastro.",
+  "start_url": "./BlocoDeNotas.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#121212",
+  "theme_color": "#121212",
+  "lang": "pt-BR",
+  "categories": [
+    "productivity",
+    "lifestyle"
+  ],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
